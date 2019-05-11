@@ -1,0 +1,103 @@
+﻿<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">@_localizer["title"]</div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">@_localizer["tunnelProtocol"]</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="tunnelProtocol" value="http" title="http" checked="">
+                                <input type="radio" name="tunnelProtocol" value="https" title="https" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">@_localizer["tunnelName"]</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="tunnelName" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">@_localizer["tunnelName.tip"]</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">@_localizer["subDomain"]<span style="color:red">(*)</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="subDomain" lay-verify="required" lay-verType="tips" autocomplete="off" class="layui-input" oninput="setFullUrl(this)" onpropertychange="setFullUrl(this)">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">@_localizer["subDomain.tip"]</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">@_localizer["fullurl"]</label>
+                            <div class="layui-input-inline layui-hide">
+                                <input type="text" name="fullUrl" id="fullUrl" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid"><span id="domain"></span>@ViewData["Domain"]</div>
+                        </div>
+                        <div class="layui-form-item layui-hide">
+                            <label class="layui-form-label">@_localizer["localPort"]</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="localPort" autocomplete="off" class="layui-input" value="0">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">@_localizer["localPort.tip"]</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="create">@_localizer["btn"]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var setFullUrl;
+
+        layui.config({
+            base: '../../../layuiadmin/'
+        }).extend({
+            index: 'lib/index'
+        }).use(['index', 'form', 'layer'], function () {
+            var form = layui.form
+                , $ = layui.jquery
+                , layer = layui.layer;
+
+            form.verify({
+                required: [/[\S]+/, "@_localizer["required"]"],
+            });
+
+            form.on('submit(create)', function (data) {
+                $.ajax({
+                    type: "post",
+                    dataType: 'json',
+                    url: '/api/add_tunnel',
+                    data: JSON.stringify(data.field),
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function (result) {
+                        if (result.code == 0) {
+                            layer.msg("@_localizer["add_tunnel.msg"]！", {
+                                icon: 1,
+                                time: 1000
+                            }, function () {
+                                location.reload();
+                            });
+                        } else {
+                            layer.msg(result.msg, {
+                                icon: 2,
+                                time: 1000
+                            });
+                        }
+                    }
+                });
+            });
+
+            setFullUrl = function (e) {
+                var value = $(e).val();
+                $("#fullUrl").text(value);
+                $("#domain").text(value);
+            }
+        });
+    </script>
+}

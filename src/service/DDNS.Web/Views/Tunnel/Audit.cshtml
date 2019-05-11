@@ -1,0 +1,212 @@
+﻿<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form" lay-filter="tunnel" style="padding-top:15px;height:auto;">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["username"]</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" placeholder="@_localizer["filter.username"]" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["email"]</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="email" placeholder="@_localizer["filter.email"]" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["subDomain"]</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="subDomain" placeholder="@_localizer["filter.subDomain"]" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" lay-submit lay-filter="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+                <div class="layui-form layui-inline">
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="0" title="@_localizer["status0"]" checked="">
+                        <input type="radio" name="status" value="-1" title="@_localizer["status1"]">
+                        <input type="radio" name="status" value="1" title="@_localizer["status2"]">
+                        <input type="radio" name="status" value="9" title="@_localizer["status3"]">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table id="tunnelList" lay-filter="tunnelList"></table>
+            <script type="text/html" id="table-content-list">
+                {{# if(d.status === 0) { }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pass"><i class="layui-icon layui-icon-ok"></i>@_localizer["btn.pass"]</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refuse"><i class="layui-icon layui-icon-close"></i>@_localizer["btn.refuse"]</a>
+                {{# } else if(d.status === 1) { }}
+                @*<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refuse"><i class="layui-icon layui-icon-close"></i>@_localizer["拒绝"]</a>*@
+                {{# } else if(d.status === -1) { }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pass"><i class="layui-icon layui-icon-ok"></i>@_localizer["btn.pass"]</a>
+                {{# } }}
+            </script>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        layui.config({
+            base: '../../../layuiadmin/'
+        }).extend({
+            index: 'lib/index'
+        }).use(['index', 'form', 'table'], function () {
+            var table = layui.table
+                , form = layui.form
+                , $ = layui.jquery;
+
+            $(".layui-form-label").css("width", "auto");
+
+            form.on('submit(search)', function (data) {
+                var field = data.field;
+                if (field.email != "" || field.username != "" || field.subDomain != "") {
+                    table.reload('tunnelList', {
+                        where: field
+                        , page: {
+                            curr: 1
+                        }
+                    });
+                }
+            });
+            form.on('radio', function (data) {
+                form.val("tunnel", {
+                    "username": ''
+                    , "email": ''
+                });
+                table.reload('tunnelList', {
+                    where: {
+                        status: data.value
+                        , username: ''
+                        , email: ''
+                        , subDomain: ''
+                    }
+                    , page: {
+                        curr: 1
+                    }
+                });
+            });
+
+            table.render({
+                elem: '#tunnelList'
+                , url: '/api/v2/tunnels'
+                , cols: [
+                    [{
+                        field: 'tunnelId',
+                        title: '@_localizer["tunnelId"]'
+                    }, {
+                        field: 'userName',
+                        title: '@_localizer["username"]'
+                    }, {
+                        field: 'email',
+                        title: '@_localizer["email"]'
+                    }, {
+                        field: 'tunnelName',
+                        title: '@_localizer["tunnelName"]'
+                    }, {
+                        field: 'tunnelProtocol',
+                        title: '@_localizer["tunnelProtocol"]'
+                    }, {
+                        field: 'subDomain',
+                        title: '@_localizer["subDomain"]'
+                    },{
+                        field: 'fullUrl',
+                        title: '@_localizer["fullUrl"]'
+                    }, {
+                        field: 'createTime',
+                        title: '@_localizer["createTime"]'
+                    }, {
+                        field: 'openTime',
+                        title: '@_localizer["openTime"]'
+                    }, {
+                        field: 'expiredTime',
+                        title: '@_localizer["expiredTime"]'
+                    }, {
+                        title: '@_localizer["operate"]',
+                        width: 150,
+                        align: 'center',
+                        fixed: 'right',
+                        toolbar: '#table-content-list'
+                    }]
+                ],
+                page: true,
+                limit: 10,
+                limits: [10, 15, 20, 25, 30],
+                text: {
+                    none: '@_localizer["none"]'
+                }
+            });
+
+            function AuditTunnel(obj, data, index) {
+                $.ajax({
+                    type: "post",
+                    dataType: 'json',
+                    data: JSON.stringify(data),
+                    url: '/api/audit_tunnel',
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function (result) {
+                        if (result.code == 0) {
+                            layer.msg("@_localizer["audit_tunnel.msg"]", {
+                                icon: 1,
+                                time: 1000
+                            }, function () {
+                                obj.del();
+                                layer.close(index);
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1000
+                            });
+                        }
+                    }
+                });
+            }
+
+            table.on('tool(tunnelList)', function (obj) {
+                var data = new Object();
+                data.userId = obj.data.userId;
+                data.tunnelId = obj.data.tunnelId;
+                if (obj.event === 'pass') {
+                    data.status = 1;
+                    layer.open({
+                        type: 2,
+                        title: '@_localizer["auditdetail.title"]',
+                        content: '/tunnel/auditdetail?tunnelId=' + obj.data.tunnelId,
+                        maxmin: true,
+                        area: ['700px', '500px'],
+                        btn: ['@_localizer["btn.ok"]', '@_localizer["btn.cancel"]'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submit = layero.find('iframe').contents().find("#ok");
+
+                            iframeWindow.layui.form.on('submit(ok)', function (_data) {
+                                data.expiredTime = _data.field.expiredTime;
+                                data.remotePort = _data.field.remotePort;
+                                AuditTunnel(obj, data, index);
+                            });
+
+                            submit.trigger('click');
+                        }
+                    });
+                } else if (obj.event === 'refuse') {
+                    data.status = -1;
+                    layer.confirm("@_localizer["refuse.tip"]", {
+                        title: '@_localizer["tips"]'
+                        , btn: ['@_localizer["btn.ok"]', '@_localizer["btn.cancel"]']
+                    }, function (index) {
+                        console.log(data)
+                        AuditTunnel(obj, data, index);
+                    });
+                }
+
+                
+            });
+        });
+    </script>
+}

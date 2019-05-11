@@ -1,0 +1,328 @@
+﻿<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["username"]</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" placeholder="@_localizer["filter.username"]" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["Token"]</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="token" placeholder="@_localizer["filter.token"]" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["email"]</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="email" placeholder="@_localizer["filter.email"]" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" lay-submit lay-filter="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">@_localizer["filter.status"]</label>
+                    <div class="layui-input-inline" style="width:100px;margin-top:-6px;">
+                        <input type="checkbox" name="status" lay-skin="switch" lay-text="@_localizer["status.yes"]|@_localizer["status.no"]">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-list" data-type="add">@_localizer["adduser"]</button>
+            </div>
+            <table id="userlist" lay-filter="userlist"></table>
+            <script type="text/html" id="statusTpl">
+                {{#  if(d.status === 0) { }}
+                <button class="layui-btn-primary layui-btn-xs">@_localizer["status.0"]</button>
+                {{#  } else if(d.status === 1) { }}
+                <button class="layui-btn-primary layui-btn-xs">@_localizer["status.1"]</button>
+                {{#  } else { }}
+                <button class="layui-btn-primary layui-btn-xs">@_localizer["status.9"]</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="table-content-list">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>@_localizer["btn.edit"]</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>@_localizer["btn.del"]</a>
+                {{# if(d.status === 0) { }}
+                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="disable"><i class="layui-icon layui-icon-close"></i>@_localizer["btn.disable"]</a>
+                {{# } else if(d.status === 1) { }}
+                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="ok"><i class="layui-icon layui-icon-ok"></i>@_localizer["btn.ok"]</a>
+                {{# } }}
+                <a class="layui-btn layui-btn-xs" lay-event="open"><i class="layui-icon layui-icon-senior"></i>@_localizer["btn.open"]</a>
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="opened"><i class="layui-icon layui-icon-senior"></i>@_localizer["btn.opened"]</a>
+            </script>
+            <script type="text/html" id="resetTokenTpl">
+                {{ d.token }}
+                <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="resetToken('{{ d.id }}')">@_localizer["btn.reset"]</a>
+            </script>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script>
+        var resetToken;
+
+        layui.config({
+            base: '../../../layuiadmin/'
+        }).extend({
+            index: 'lib/index'
+        }).use(['index', 'form', 'table'], function () {
+            var table = layui.table
+                , form = layui.form
+                , $ = layui.jquery;
+
+            $(".layui-form-label").css("width", "auto");
+
+            form.on('submit(search)', function (data) {
+                var field = data.field;
+                if (field.email != "" || field.username != "" || field.token != "") {
+                    table.reload('userlist', {
+                        where: field
+                        , page: {
+                            curr: 1
+                        }
+                    });
+                }
+            });
+            form.on('switch', function (data) {
+                var status = data.elem.checked ? 1 : 0;
+                table.reload('userlist', {
+                    where: {
+                        status: status
+                    }
+                    , page: {
+                        curr: 1
+                    }
+                });
+            });
+
+            table.render({
+                elem: '#userlist'
+                , url: '/api/users'
+                , cols: [
+                    [{
+                        field: 'token',
+                        width: 100,
+                        title: 'Token',
+                            toolbar: '#resetTokenTpl'
+                    }, {
+                        field: 'userName',
+                        width: 150,
+                        title: '@_localizer["username"]',
+                    }, {
+                        field: 'email',
+                        title: '@_localizer["email"]'
+                    }, {
+                        field: 'registerTime',
+                        title: '@_localizer["registertime"]',
+                        sort: true
+                    }, {
+                        field: 'status',
+                        width: 100,
+                        title: '@_localizer["status"]',
+                        templet: '#statusTpl',
+                        align: 'center'
+                    }, {
+                        title: '@_localizer["operate"]',
+                        width: 400,
+                        align: 'center',
+                        fixed: 'right',
+                        toolbar: '#table-content-list'
+                    }]
+                ],
+                page: true,
+                limit: 10,
+                limits: [10, 15, 20, 25, 30],
+                text: {
+                    none: '@_localizer["text"]'
+                }
+            });
+
+            function userHandle(url, tip, msg, obj) {
+                layer.confirm(tip, {
+                    title: '@_localizer["tip"]'
+                    , btn: ['@_localizer["btn.confirm"]', '@_localizer["btn.cancel"]']
+                }, function (index) {
+                    $.ajax({
+                        type: "get",
+                        dataType: 'json',
+                        url: '/api/' + url + '?userId=' + obj.data.id,
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function (result) {
+                            if (result.code == 0) {
+                                layer.msg(msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    obj.del();
+                                    layer.close(index);
+                                });
+                            } else {
+                                layer.msg("@_localizer["error"]", {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            table.on('tool(userlist)', function (obj) {
+                if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2,
+                        title: '@_localizer["edit.title"]',
+                        content: '/users/edit?id=' + obj.data.id,
+                        maxmin: true,
+                        area: ['450px', '300px'],
+                        btn: ['@_localizer["btn.confirm"]', '@_localizer["btn.cancel"]'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submit = layero.find('iframe').contents().find("#update");
+
+                            iframeWindow.layui.form.on('submit(update)', function (data) {
+                                var field = data.field;
+
+                                $.ajax({
+                                    type: "post",
+                                    dataType: 'json',
+                                    url: '/api/edit_user?userId=' + obj.data.id,
+                                    data: JSON.stringify(field),
+                                    contentType: 'application/json;charset=UTF-8',
+                                    success: function (result) {
+                                        if (result.code == 0) {
+                                            layer.msg("@_localizer["edit.msg"]", {
+                                                icon: 1,
+                                                time: 1000
+                                            }, function () {
+                                                obj.update({
+                                                    userName: field.userName,
+                                                    email: field.email
+                                                });
+
+                                                form.render();
+                                                layer.close(index);
+                                            });
+                                        } else {
+                                            layer.msg(result.msg, {
+                                                icon: 2,
+                                                time: 1000
+                                            });
+                                        }
+                                    }
+                                });
+                            });
+
+                            submit.trigger('click');
+                        }
+                    });
+                } else if (obj.event === 'del') {
+                    userHandle('del_user', '@_localizer["del.title"]', '@_localizer["del.msg"]', obj);
+                } else if (obj.event === 'disable') {
+                    userHandle('disable_user', '@_localizer["disable.title"]', '@_localizer["disable.msg"]', obj);
+                } else if (obj.event === 'ok') {
+                    userHandle('remove_disable', '@_localizer["remove_disable.title"]', '@_localizer["remove_disable.msg"]', obj);
+                } else if (obj.event === 'open') {
+                    layer.open({
+                        type: 2,
+                        title: '@_localizer["btn.open"]',
+                        content: '/tunnel/admincreate?userId=' + obj.data.id,
+                        maxmin: true,
+                        area: ['800px', '550px'],
+                        btn: ['@_localizer["btn.confirm"]', '@_localizer["btn.cancel"]'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submit = layero.find('iframe').contents().find("#create");
+
+                            iframeWindow.layui.form.on('submit(create)', function (data) {
+                                var field = data.field;
+
+                                $.ajax({
+                                    type: "post",
+                                    dataType: 'json',
+                                    url: '/api/v2/add_tunnel?userId=' + obj.data.id,
+                                    data: JSON.stringify(field),
+                                    contentType: 'application/json;charset=UTF-8',
+                                    success: function (result) {
+                                        if (result.code == 0) {
+                                            layer.msg("@_localizer["open.msg"]！", {
+                                                icon: 1,
+                                                time: 1000
+                                            }, function () {
+                                                layer.closeAll();
+                                            });
+                                        } else {
+                                            layer.msg(result.msg, {
+                                                icon: 2,
+                                                time: 1000
+                                            });
+                                        }
+                                    }
+                                });
+                            });
+
+                            submit.trigger('click');
+                        }
+                    });
+                } else if (obj.event === 'opened') {
+                    var index = layer.open({
+                        type: 2,
+                        title: '【' + obj.data.userName + '】@_localizer["tunnel"]',
+                        maxmin: true,
+                        area: ['800px', '400px'],
+                        content: '/tunnel/list?userid=' + obj.data.id
+                    });
+                    layer.full(index);
+                }
+            });
+
+            var active = {
+                add: function () {
+                    var topLayui = parent === self ? layui : top.layui;
+                    topLayui.index.openTabsPage("/users/create", "@_localizer["adduser"]");
+                }
+            };
+            $('.layui-btn.layuiadmin-btn-list').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            resetToken = function (id) {
+                layer.confirm("@_localizer["reset.title"]", {
+                    title: '@_localizer["tip"]'
+                    , btn: ['@_localizer["btn.confirm"]', '@_localizer["btn.cancel"]']
+                }, function (index) {
+                    $.ajax({
+                        type: "get",
+                        dataType: 'json',
+                        url: '/api/reset_token?userId=' + id,
+                        contentType: 'application/json;charset=UTF-8',
+                        success: function (result) {
+                            if (result.code == 0) {
+                                layer.msg("@_localizer["reset.msg"]！", {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    table.reload('userlist');
+                                });
+                            } else {
+                                layer.msg(result.msg, {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        });
+</script>
+}
