@@ -9,5 +9,6 @@
         public string Msg { get; set; } = "success";
 
         public T Data { get; set; }
+
     }
 }
