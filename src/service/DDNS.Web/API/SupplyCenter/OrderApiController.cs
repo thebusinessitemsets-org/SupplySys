@@ -31,6 +31,11 @@ namespace DDNS.Web.API.SupplyCenter
             _tunnelConfig = config.Value;
         }
 
+        /// <summary>
+        /// 添加主订单
+        /// </summary>
+        /// <param name="orderEntity"></param>
+        /// <returns></returns>
         [Route("Add")]
         [HttpPost]
         public async Task<ResponseViewModel<bool>> AddOrder(Order00EditViewModel orderEntity)
@@ -69,6 +74,11 @@ namespace DDNS.Web.API.SupplyCenter
             return data;
         }
 
+        /// <summary>
+        /// 删除主订单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("Del")]
         [HttpPost]
         public async Task<ResponseViewModel<bool>> DelOrder(int id)
@@ -81,6 +91,12 @@ namespace DDNS.Web.API.SupplyCenter
             return data;
         }
 
+        /// <summary>
+        /// 更新主订单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="orderEntity"></param>
+        /// <returns></returns>
         [Route("Update")]
         [HttpPost]
         public async Task<ResponseViewModel<bool>> UpdateOrder(int id,Order00EditViewModel orderEntity)
@@ -108,20 +124,35 @@ namespace DDNS.Web.API.SupplyCenter
             return data;
         }
 
-        //public async Task<OrderEntity> Order(int id)
-        //{
-        //    return await _content.Order.FindAsync(id);
-        //}
+        /// <summary>
+        /// 查询单个主订单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("Order")]
+        [HttpGet]
+        public async Task<OrderEntity> Order(int id)
+        {
+            return await _orderProvider.Order(id);
+        }
 
-        //public async Task<IEnumerable<OrderEntity>> OrderList(DateTime begTime, DateTime endTime)
-        //{
-        //    var list = await _content.Order.Where(x => x.EXPECT_DATE >= begTime && x.EXPECT_DATE <= endTime).ToListAsync();
+        /// <summary>
+        /// 查询主订单清单
+        /// </summary>
+        /// <param name="begTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        [Route("OrderList")]
+        [HttpGet]
+        public async Task<IEnumerable<OrderEntity>> OrderList(DateTime begTime, DateTime endTime)
+        {
+            var list = await _orderProvider.OrderList(begTime,endTime);
 
-        //    list = list.OrderByDescending(x => x.EXPECT_DATE).ToList();
+            list = list.OrderByDescending(x => x.EXPECT_DATE).ToList();
 
-        //    return list;
+            return list;
 
-        //}
+        }
 
 
     }
