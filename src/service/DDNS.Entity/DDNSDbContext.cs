@@ -1,5 +1,6 @@
 ﻿using DDNS.Entity.Events;
 using DDNS.Entity.LoginLog;
+using DDNS.Entity.SupplyCenter;
 using DDNS.Entity.Tunnel;
 using DDNS.Entity.Users;
 using DDNS.Entity.Verify;
@@ -22,6 +23,13 @@ namespace DDNS.Entity
         public DbSet<CloseConnectionEntity> CloseConnections { get; set; }
 
         public DbSet<CloseTunnelEntity> CloseTunnels { get; set; }
+
+
+        public DbSet<OrderEntity> Order { get; set; }
+        public DbSet<Order01Entity> Order01 { get; set; }
+        public DbSet<ColOrderEntity> ColOrder { get; set; }
+        public DbSet<ColOrder01Entity> ColOrder01 { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
