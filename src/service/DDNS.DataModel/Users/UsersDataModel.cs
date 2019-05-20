@@ -37,7 +37,7 @@ namespace DDNS.DataModel.Users
             var _user = await _content.Users.FindAsync(id);
             if (_user != null)
             {
-                _user.IsDelete = (int)UserDeleteEnum.Deleted;
+                _user.IsEnable = (int)UserDeleteEnum.Deleted;
                 return await _content.SaveChangesAsync() > 0;
             }
             else
@@ -54,7 +54,7 @@ namespace DDNS.DataModel.Users
             var _user = await _content.Users.FindAsync(id);
             if (_user != null)
             {
-                _user.Status = (int)UserStatusEnum.Disable;
+                _user.IsEnable = (int)UserStatusEnum.Disable;
                 return await _content.SaveChangesAsync() > 0;
             }
             else
@@ -71,7 +71,7 @@ namespace DDNS.DataModel.Users
             var _user = await _content.Users.FindAsync(id);
             if (_user != null)
             {
-                _user.Status = (int)UserStatusEnum.Normal;
+                _user.IsEnable = (int)UserStatusEnum.Normal;
                 return await _content.SaveChangesAsync() > 0;
             }
             else
@@ -85,7 +85,7 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<bool> UpdateUser(UsersEntity user)
         {
-            var _user = await _content.Users.FindAsync(user.Id);
+            var _user = await _content.Users.FindAsync(user.ID);
             if (_user != null)
             {
                 _user = user;
@@ -116,7 +116,7 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<UsersEntity> GetUserInfo(string userName, string password)
         {
-            return await _content.Users.FirstOrDefaultAsync(u => (u.UserName == userName || u.Email == userName) && u.Password == MD5Util.TextToMD5(password));
+            return await _content.Users.FirstOrDefaultAsync(u => (u.LoginName == userName || u.EMP_EMAIL == userName) && u.LoginPassword == MD5Util.TextToMD5(password));
         }
 
         /// <summary>
@@ -127,14 +127,14 @@ namespace DDNS.DataModel.Users
         public async Task<UsersEntity> GetUserInfo(string userName)
         {
             try {
-                return await _content.Users.FirstOrDefaultAsync(u => u.UserName == userName || u.Email == userName);
+                return await _content.Users.FirstOrDefaultAsync(u => u.LoginName == userName || u.EMP_EMAIL == userName);
             }
             catch (System.Exception ex)
             {
                 string err = ex.Message;
             }
 
-            return await _content.Users.FirstOrDefaultAsync(u => u.UserName == userName || u.Email == userName);
+            return await _content.Users.FirstOrDefaultAsync(u => u.LoginName == userName || u.EMP_EMAIL == userName);
 
         }
 
@@ -148,22 +148,19 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<IEnumerable<UsersEntity>> UserList(string userName = null, string email = null, int status = 0, string token = null)
         {
-            var list = await _content.Users.Where(x => x.IsDelete == (int)UserDeleteEnum.Normal && x.IsAdmin == (int)UserTypeEnum.IsUser).ToListAsync();
+            var list = await _content.Users.Where(x => x.IsEnable == (int)UserDeleteEnum.Normal).ToListAsync();
 
             if (!string.IsNullOrEmpty(userName))
             {
-                list = list.Where(x => x.UserName.Contains(userName)).ToList();
+                list = list.Where(x => x.LoginName.Contains(userName)).ToList();
             }
             if (!string.IsNullOrEmpty(email))
             {
-                list = list.Where(x => x.Email.Contains(email)).ToList();
+                list = list.Where(x => x.EMP_EMAIL.Contains(email)).ToList();
             }
-            if (!string.IsNullOrEmpty(token))
-            {
-                list = list.Where(x => x.AuthToken == token).ToList();
-            }
+             
 
-            list = list.Where(x => x.Status == status).OrderByDescending(x => x.RegisterTime).ToList();
+            list = list.Where(x => x.IsEnable == status).OrderByDescending(x => x.LoginTime).ToList();
 
             return list;
         }

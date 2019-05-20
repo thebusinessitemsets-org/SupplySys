@@ -7,5 +7,6 @@
         public string Password { get; set; }
 
         public string Repass { get; set; }
+         
     }
 }

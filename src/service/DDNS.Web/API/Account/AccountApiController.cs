@@ -55,7 +55,7 @@ namespace DDNS.Web.API.Account
         {
             var data = new ResponseViewModel<bool>();
 
-            if (vm.Password != vm.Repass)
+            if (vm.LoginPassword != vm.ReLoginPassword)
             {
                 data.Code = 1;
                 data.Msg = _localizer["password"];
@@ -63,7 +63,7 @@ namespace DDNS.Web.API.Account
                 return data;
             }
 
-            var _user = await _userProvider.GetUserInfo(vm.UserName);
+            var _user = await _userProvider.GetUserInfo(vm.LoginName);
             if (_user != null)
             {
                 data.Code = 1;
@@ -71,7 +71,7 @@ namespace DDNS.Web.API.Account
 
                 return data;
             }
-            _user = await _userProvider.GetUserInfo(vm.Email);
+            _user = await _userProvider.GetUserInfo(vm.LoginName);
             if (_user != null)
             {
                 data.Code = 1;
@@ -82,15 +82,38 @@ namespace DDNS.Web.API.Account
 
             var user = new UsersEntity
             {
-                UserName = vm.UserName,
-                Email = vm.Email,
-                Password = MD5Util.TextToMD5(vm.Password),
-                RegisterTime = DateTime.Now,
-                //Status = (int)UserStatusEnum.UnActivated,
-                Status = (int)UserStatusEnum.Normal,
-                IsDelete = (int)UserDeleteEnum.Normal,
-                IsAdmin = (int)UserTypeEnum.IsUser,
-                AuthToken = GuidUtil.GetGuid()
+                LoginName = vm.LoginName,
+                LoginPassword = vm.LoginPassword,
+                LoginTime = DateTime.Now.ToString(),
+                //BranchID
+                //BranchType
+                //SHOP_ID
+                //DIVISION_ID
+                IsEnable = (int)UserTypeEnum.IsUser,
+                //EMP_ID
+                //EMP_NAME
+                //EMP_Birthday
+                //EMP_ADD
+                //EMP_TEL
+                //EMP_ZIP
+                //EMP_EMAIL
+                //EMP_MOBILE
+                //EMP_MEMO
+                //EMP_ENABLE
+                //EMP_SEX
+                //EMP_CodeID
+                //EMP_LEVEL
+                //EMP_BDATE
+                //EMP_EDATE
+                //EMP_WAGE
+                //EMP_Education
+                //CRT_DATETIME
+                //CRT_USER_ID
+                //MOD_DATETIME
+                //MOD_USER_ID
+                //LAST_UPDATE
+                STATUS = (int)UserStatusEnum.Normal
+                 
             };
 
             data.Data = await _userProvider.AddUser(user);
@@ -146,10 +169,10 @@ namespace DDNS.Web.API.Account
             try { 
             if (ModelState.IsValid)
             {
-                var user = await _userProvider.GetUserInfo(vm.UserName, vm.Password);
+                var user = await _userProvider.GetUserInfo(vm.LoginName, vm.LoginPassword);
                 if (user != null)
                 {
-                    if (user.Status == (int)UserStatusEnum.Disable)
+                    if (user.IsEnable == (int)UserStatusEnum.Disable)
                     {
                         data.Code = 1;
                         data.Msg = _localizer["login.forbidden"];
@@ -160,17 +183,17 @@ namespace DDNS.Web.API.Account
                         data.Msg = _localizer["login.success"];
 
                         var claimIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                        claimIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-                        claimIdentity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
-                        claimIdentity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
-                        claimIdentity.AddClaim(new Claim(ClaimTypes.Role, user.IsAdmin.ToString()));
+                        claimIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
+                        claimIdentity.AddClaim(new Claim(ClaimTypes.Name, user.LoginName));
+                        claimIdentity.AddClaim(new Claim(ClaimTypes.Email, user.EMP_EMAIL));
+                        claimIdentity.AddClaim(new Claim(ClaimTypes.Role, user.IsEnable.ToString()));
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
 
                         HttpContext.Session.Remove("verify_code");
 
                         await _loginProvider.AddLoginLog(new LoginLogEntity
                         {
-                            UserId = user.Id,
+                            UserId = user.ID,
                             LoginTime = DateTime.Now,
                             LoginIp = _accessor.HttpContext.Connection.RemoteIpAddress.ToString()
                         });
@@ -201,17 +224,17 @@ namespace DDNS.Web.API.Account
         {
             var data = new ResponseViewModel<object>();
 
-            var user = await _userProvider.GetUserInfo(vm.Email);
+            var user = await _userProvider.GetUserInfo(vm.EMP_EMAIL);
             if (user != null)
             {
                 //发送找回密码邮件
                 var tempHtml = "<p>{0}</p>";
                 var body = string.Empty;
-                var url = _config.Domain + "/account/reset?token=" + MD5Util.TextToMD5(user.Email);
+                var url = _config.Domain + "/account/reset?token=" + MD5Util.TextToMD5(user.EMP_EMAIL);
                 var link = "<a href='" + url + "'>" + url + "</a>";
 
                 body += string.Format(tempHtml, _localizer["forget.body1"]);
-                body += string.Format(tempHtml, user.UserName + _localizer["forget.body2"]);
+                body += string.Format(tempHtml, user.LoginName + _localizer["forget.body2"]);
                 body += string.Format(tempHtml, _localizer["forget.body3"] + link);
                 body += string.Format(tempHtml, _localizer["forget.body4"]);
                 body += string.Format(tempHtml, _localizer["forget.body5"]);
@@ -220,8 +243,8 @@ namespace DDNS.Web.API.Account
 
                 var verify = new VerifyEntity
                 {
-                    UserId = user.Id,
-                    Token = MD5Util.TextToMD5(user.Email),
+                    UserId = user.ID,
+                    Token = MD5Util.TextToMD5(user.EMP_EMAIL),
                     Status = (int)VerifyStatusEnum.Normal,
                     Type = (int)VerifyTypeEnum.Password,
                     Time = DateTime.Now
@@ -230,7 +253,7 @@ namespace DDNS.Web.API.Account
 
                 try
                 {
-                    _email.SendEmail(user.UserName, user.Email, _localizer["forget.subject"], body);
+                    _email.SendEmail(user.LoginName, user.EMP_EMAIL, _localizer["forget.subject"], body);
                 }
                 catch (Exception e)
                 {
@@ -258,7 +281,7 @@ namespace DDNS.Web.API.Account
         {
             var data = new ResponseViewModel<bool>();
 
-            if (vm.Password != vm.Repass)
+            if (vm.LoginPassword != vm.ReLoginPassword)
             {
                 data.Code = 1;
                 data.Msg = _localizer["password"];
@@ -266,17 +289,17 @@ namespace DDNS.Web.API.Account
                 return data;
             }
 
-            var verify = _verifyProvider.GetVerifyInfo(vm.Token, VerifyTypeEnum.Password);
+            var verify = _verifyProvider.GetVerifyInfo(vm.ReLoginPassword, VerifyTypeEnum.Password);
             if (verify != null)
             {
                 var user = await _userProvider.GetUserInfo(verify.UserId);
-                user.Password = MD5Util.TextToMD5(vm.Password);
+                user.LoginPassword = MD5Util.TextToMD5(vm.LoginPassword);
 
                 data.Code = 0;
                 data.Msg = _localizer["reset.success"];
                 data.Data = await _userProvider.UpdateUser(user);
 
-                await _verifyProvider.VerifySuccess(vm.Token);
+                await _verifyProvider.VerifySuccess(vm.LoginPassword);
             }
             else
             {
@@ -302,9 +325,9 @@ namespace DDNS.Web.API.Account
             var userId = HttpContext.User.FindFirst(u => u.Type == ClaimTypes.NameIdentifier).Value;
             var user = await _userProvider.GetUserInfo(Convert.ToInt32(userId));
 
-            if (user != null && user.Password == MD5Util.TextToMD5(vm.OldPassword))
+            if (user != null && user.LoginPassword == MD5Util.TextToMD5(vm.OldPassword))
             {
-                user.Password = MD5Util.TextToMD5(vm.Repass);
+                user.LoginPassword = MD5Util.TextToMD5(vm.Repass);
 
                 data.Code = 0;
                 data.Msg = _localizer["password.success"];

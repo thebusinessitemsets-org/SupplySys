@@ -2,6 +2,6 @@
 {
     public class ForgetViewModel
     {
-        public string Email { get; set; }
+        public string EMP_EMAIL { get; set; }
     }
 }

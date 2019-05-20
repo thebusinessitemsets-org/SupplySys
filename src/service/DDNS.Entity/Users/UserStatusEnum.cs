@@ -11,10 +11,6 @@
         /// 禁用
         /// </summary>
         Disable = 1,
-
-        /// <summary>
-        /// 未激活
-        /// </summary>
-        UnActivated = 9,
+ 
     }
 }
