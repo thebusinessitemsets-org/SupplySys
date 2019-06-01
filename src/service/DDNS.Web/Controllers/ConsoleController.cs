@@ -46,11 +46,9 @@ namespace DDNS.Web.Controllers
 
             var info = new UserInfoViewModel
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                RegisterTime = user.RegisterTime,
-                LastLoginTime = log.LoginTime,
-                LastLoginIP = log.LoginIp
+                LoginName = user.LoginName,
+                EMP_EMAIL = user.EMP_EMAIL
+              
             };
 
             return View(info);

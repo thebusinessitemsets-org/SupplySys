@@ -86,7 +86,7 @@ namespace DDNS.DataModel.Tunnel
         /// <returns></returns>
         public async Task<IEnumerable<UserTunnelsEntity>> Tunnels(string userName = null, string email = null, int status = 0, string subDomain = null)
         {
-            var list = await _content.Tunnels.Join(_content.Users, t => t.UserId, u => u.Id, (t, u) => new UserTunnelsEntity
+            var list = await _content.Tunnels.Join(_content.Users, t => t.UserId, u => u.ID, (t, u) => new UserTunnelsEntity
             {
                 TunnelId = t.TunnelId,
                 TunnelProtocol = t.TunnelProtocol,
@@ -98,9 +98,8 @@ namespace DDNS.DataModel.Tunnel
                 OpenTime = t.OpenTime,
                 ExpiredTime = t.ExpiredTime,
                 FullUrl = t.FullUrl,
-                UserName = u.UserName,
-                Email = u.Email,
-                AuthToken = u.AuthToken,
+                UserName = u.LoginName,
+                Email = u.EMP_EMAIL,
                 UserId = t.UserId
             }).ToListAsync();
 
