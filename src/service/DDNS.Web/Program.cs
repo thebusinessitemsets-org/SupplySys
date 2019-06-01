@@ -7,6 +7,7 @@ namespace DDNS.Web
     {
         public static void Main(string[] args)
         {
+            //开始执行
             CreateWebHostBuilder(args).Build().Run();
         }
 
