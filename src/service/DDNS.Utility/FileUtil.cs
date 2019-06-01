@@ -54,45 +54,6 @@ namespace DDNS.Utility
         }
 
         /// <summary>
-        /// 审核申请隧道,写入文本数据
-        /// </summary>
-        /// <param name="tunnel"></param>
-        /// <param name="user"></param>
-        /// <param name="path"></param>
-        /// <param name="port"></param>
-        /// <returns></returns>
-        public static async Task WriteTunnel(TunnelsEntity tunnel, UsersEntity user, string path, int port)
-        {
-            var list = new List<string>();
-            var exist = false;
-            var contentList = await ReadFile(path);
-            if (contentList != null)
-            {
-                foreach (var item in contentList)
-                {
-                    var row = item.ToString().Split("|");
-                    var authToken = row[0];
-                    var subDomains = row[1];
-                    var remotePorts = row[2];
-                    var userName = row[3];
-                    if (user.AuthToken == authToken)
-                    {
-                        subDomains += "," + tunnel.SubDomain;
-                        remotePorts += "," + port;
-                        exist = true;
-                    }
-                    var _item = authToken + "|" + subDomains + "|" + remotePorts + "|" + userName;
-                    list.Add(_item);
-                }
-            }
-            if (!exist)
-            {
-                list.Add(user.AuthToken + "|" + tunnel.SubDomain + "|" + port + "|" + user.UserName);
-            }
-            WriteFile(path, list);
-        }
-
-        /// <summary>
         /// 重置Token,写入文本数据
         /// </summary>
         /// <param name="path"></param>

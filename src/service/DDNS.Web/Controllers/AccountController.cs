@@ -87,7 +87,7 @@ namespace DDNS.Web.Controllers
             if (verify != null)
             {
                 var user = await _usersProvider.GetUserInfo(verify.UserId);
-                user.Status = (int)UserStatusEnum.Normal;
+                user.IsEnable = (int)UserStatusEnum.Normal;
                 await _usersProvider.UpdateUser(user);
 
                 await _verifyProvider.VerifySuccess(token);
