@@ -50,7 +50,7 @@ namespace DDNS.Web.Controllers
                 EMP_EMAIL = user.EMP_EMAIL
               
             };
-
+             
             return View(info);
         }
     }
