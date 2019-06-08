@@ -4,9 +4,8 @@ using System.Text;
 
 namespace DDNS.ViewModel.SupplyCenter
 {
-    public class ColOrder01ViewModel
+    public class ColOrder01EditViewModel
     {
-        //public int Id { get; set; }
         public string SHOP_ID { get; set; }
         public string COL_ID { get; set; }
         public int SNo { get; set; }
@@ -17,6 +16,5 @@ namespace DDNS.ViewModel.SupplyCenter
         public int STD_CONVERT { get; set; }
         public decimal STD_QUAN { get; set; }
         public decimal STD_PRICE { get; set; }
-
     }
 }

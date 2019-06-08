@@ -6,7 +6,7 @@ namespace DDNS.ViewModel.SupplyCenter
 {
     public class Order01ViewModel
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string SHOP_ID { get; set; }
         public string ORDER_ID { get; set; }
         public int SNo { get; set; }
@@ -16,7 +16,7 @@ namespace DDNS.ViewModel.SupplyCenter
         public decimal QUAN1 { get; set; }
         public decimal QUAN2 { get; set; }
         public decimal COST_PRICE { get; set; }
-        public string STD_UNIT { get; set; }
+        public decimal STD_UNIT { get; set; }
         public int STD_CONVERT { get; set; }
         public decimal STD_QUAN { get; set; }
         public decimal STD_PRICE { get; set; }

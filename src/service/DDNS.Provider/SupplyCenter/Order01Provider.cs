@@ -20,22 +20,22 @@ namespace DDNS.Provider.SupplyCenter
         {
            return _data.AddOrder01(orderEntity);
         }
-        Task<bool> DelOrder01(int id)
+        public Task<bool> DelOrder01(int id)
         {
             return _data.DelOrder01(id);
         }
-        Task<bool> UpdateOrder01(Order01Entity orderEntity)
+        public Task<bool> UpdateOrder01(Order01Entity orderEntity)
         {
             return _data.UpdateOrder01(orderEntity);
 
         }
-        Task<Order01Entity> Order01(int id)
+        public Task<Order01Entity> Order01(int id)
         {
             return _data.Order01(id);
         }
-        Task<IEnumerable<Order01Entity>> Order01List(string orderId)
+        public Task<IEnumerable<Order01Entity>> Order01List(int id)
         {
-            return _data.Order01List(orderId);
+            return _data.Order01List(id);
         }
     }
 }

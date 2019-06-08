@@ -29,6 +29,7 @@ namespace DDNS.DataModel.SupplyCenter
             var _order = await _content.Order.FindAsync(id);
             if (_order != null)
             {
+                _order.STATUS = -1;//虚拟删除
                  return await _content.SaveChangesAsync() > 0;
             }
             else

@@ -55,11 +55,11 @@ namespace DDNS.DataModel.SupplyCenter
             return await _content.Order01.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Order01Entity>> Order01List(string orderId)
+        public async Task<IEnumerable<Order01Entity>> Order01List(int id)
         {
-            var list = await _content.Order01.Where(x => x.ORDER_ID == orderId).ToListAsync();
+            var list = await _content.Order01.Where(x => x.Id == id).ToListAsync();
 
-            list = list.OrderByDescending(x => x.CRT_DATETIME).ToList();
+            list = list.OrderByDescending(x => x.SNo).ToList();
 
             return list;
 

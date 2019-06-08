@@ -29,6 +29,7 @@ namespace DDNS.Entity
         public DbSet<Order01Entity> Order01 { get; set; }
         public DbSet<ColOrderEntity> ColOrder { get; set; }
         public DbSet<ColOrder01Entity> ColOrder01 { get; set; }
+        public DbSet<ColOrder02Entity> ColOrder02 { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
