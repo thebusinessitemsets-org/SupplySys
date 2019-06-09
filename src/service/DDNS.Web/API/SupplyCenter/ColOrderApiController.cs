@@ -19,8 +19,6 @@ namespace DDNS.Web.API.SupplyCenter
     public class ColOrderApiController:ControllerBase
     {
         private readonly ColOrderProvider _colorderProvider;
-        private readonly ColOrder01Provider _colorder01Provider;
-        private readonly ColOrder02Provider _colorder02Provider;
 
         private readonly LoginLogProvider _loginLogProvider;
         private readonly IStringLocalizer<ColOrderApiController> _localizer;
@@ -192,7 +190,7 @@ namespace DDNS.Web.API.SupplyCenter
 
             };
 
-            data.Data = await _colorder01Provider.AddColOrder01(colorder01);
+            data.Data = await _colorderProvider.AddColOrder01(colorder01);
 
             return data;
         }
@@ -209,7 +207,7 @@ namespace DDNS.Web.API.SupplyCenter
         {
             var data = new ResponseViewModel<bool>();
 
-            var colorder01 = await _colorder01Provider.ColOrder01(id);
+            var colorder01 = await _colorderProvider.ColOrder01(id);
 
             colorder01.SHOP_ID = colorder01Entity.SHOP_ID;
             colorder01.COL_ID = colorder01Entity.COL_ID;
@@ -222,7 +220,7 @@ namespace DDNS.Web.API.SupplyCenter
             colorder01.STD_QUAN = colorder01Entity.STD_QUAN;
             colorder01.STD_PRICE = colorder01Entity.STD_PRICE;
 
-            data.Data = await _colorder01Provider.UpdateColOrder01(colorder01);
+            data.Data = await _colorderProvider.UpdateColOrder01(colorder01);
 
             return data;
         }
@@ -236,7 +234,7 @@ namespace DDNS.Web.API.SupplyCenter
         [HttpGet]
         public async Task<ColOrder01Entity> ColOrder01(int id)
         {
-            return await _colorder01Provider.ColOrder01(id);
+            return await _colorderProvider.ColOrder01(id);
         }
 
         /// <summary>
@@ -245,7 +243,7 @@ namespace DDNS.Web.API.SupplyCenter
         [HttpGet]
         public async Task<IEnumerable<ColOrder01Entity>> ColOrder01List(int id)
         {
-            var list = await _colorder01Provider.ColOrder01List(id);
+            var list = await _colorderProvider.ColOrder01List(id);
 
             list = list.OrderByDescending(x => x.SNo).ToList();
 
@@ -279,7 +277,7 @@ namespace DDNS.Web.API.SupplyCenter
 
             };
 
-            data.Data = await _colorder02Provider.AddColOrder02(colorder02);
+            data.Data = await _colorderProvider.AddColOrder02(colorder02);
 
             return data;
         }
@@ -296,7 +294,7 @@ namespace DDNS.Web.API.SupplyCenter
         {
             var data = new ResponseViewModel<bool>();
 
-            var colorder02 = await _colorder02Provider.ColOrder02(id);
+            var colorder02 = await _colorderProvider.ColOrder02(id);
 
             colorder02.SHOP_ID = colorder02Entity.SHOP_ID;
             colorder02.COL_ID = colorder02Entity.COL_ID;
@@ -307,7 +305,7 @@ namespace DDNS.Web.API.SupplyCenter
             colorder02.SUP_QUAN = colorder02Entity.SUP_QUAN;
             colorder02.STD_QUAN = colorder02Entity.STD_QUAN;
 
-            data.Data = await _colorder02Provider.UpdateColOrder02(colorder02);
+            data.Data = await _colorderProvider.UpdateColOrder02(colorder02);
 
             return data;
         }
@@ -321,7 +319,7 @@ namespace DDNS.Web.API.SupplyCenter
         [HttpGet]
         public async Task<ColOrder02Entity> ColOrder02(int id)
         {
-            return await _colorder02Provider.ColOrder02(id);
+            return await _colorderProvider.ColOrder02(id);
         }
 
         /// <summary>
@@ -330,7 +328,7 @@ namespace DDNS.Web.API.SupplyCenter
         [HttpGet]
         public async Task<IEnumerable<ColOrder02Entity>> ColOrder02List(int id)
         {
-            var list = await _colorder02Provider.ColOrder02List(id);
+            var list = await _colorderProvider.ColOrder02List(id);
 
             list = list.OrderByDescending(x => x.SNo).ToList();
 

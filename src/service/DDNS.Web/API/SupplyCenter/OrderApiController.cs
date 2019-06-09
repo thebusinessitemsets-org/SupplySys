@@ -19,7 +19,6 @@ namespace DDNS.Web.API.SupplyCenter
     public class OrderApiController : ControllerBase
     {
         private readonly OrderProvider _orderProvider;
-        private readonly Order01Provider _order01Provider;
         private readonly LoginLogProvider _loginLogProvider;
         private readonly IStringLocalizer<OrderApiController> _localizer;
         private readonly TunnelConfig _tunnelConfig;
@@ -192,7 +191,7 @@ namespace DDNS.Web.API.SupplyCenter
 
             };
 
-            data.Data = await _order01Provider.AddOrder01(order01);
+            data.Data = await _orderProvider.AddOrder01(order01);
 
             return data;
         }
@@ -208,7 +207,7 @@ namespace DDNS.Web.API.SupplyCenter
         {
             var data = new ResponseViewModel<bool>
             {
-                Data = await _order01Provider.DelOrder01(id)
+                Data = await _orderProvider.DelOrder01(id)
             };
 
             return data;
@@ -226,7 +225,7 @@ namespace DDNS.Web.API.SupplyCenter
         {
             var data = new ResponseViewModel<bool>();
 
-            var order = await _order01Provider.Order01(id);
+            var order = await _orderProvider.Order01(id);
              
             order.PROD_ID = orderEntity.PROD_ID;
             order.QUANTITY = orderEntity.QUANTITY;
@@ -244,7 +243,7 @@ namespace DDNS.Web.API.SupplyCenter
             order.MOD_DATETIME = orderEntity.MOD_DATETIME;
             order.MOD_USER_ID = orderEntity.MOD_USER_ID;
 
-            data.Data = await _order01Provider.UpdateOrder01(order);
+            data.Data = await _orderProvider.UpdateOrder01(order);
 
             return data;
         }
@@ -258,7 +257,7 @@ namespace DDNS.Web.API.SupplyCenter
         [HttpGet]
         public async Task<Order01Entity> Order01(int id)
         {
-            return await _order01Provider.Order01(id);
+            return await _orderProvider.Order01(id);
         }
 
         /// <summary>
@@ -267,7 +266,7 @@ namespace DDNS.Web.API.SupplyCenter
         [HttpGet]
         public async Task<IEnumerable<Order01Entity>> Order01List(int id)
         {
-            var list = await _order01Provider.Order01List(id);
+            var list = await _orderProvider.Order01List(id);
 
             list = list.OrderByDescending(x => x.SNo).ToList();
 

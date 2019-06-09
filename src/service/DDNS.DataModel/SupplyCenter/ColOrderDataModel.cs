@@ -65,6 +65,79 @@ namespace DDNS.DataModel.SupplyCenter
 
         }
 
-        
+        public async Task<bool> AddColOrder01(ColOrder01Entity colorder01Entity)
+        {
+            await _content.ColOrder01.AddAsync(colorder01Entity);
+            return await _content.SaveChangesAsync() > 0;
+        }
+
+
+        public async Task<bool> UpdateColOrder01(ColOrder01Entity colorder01Entity)
+        {
+            var _order = await _content.ColOrder01.FindAsync(colorder01Entity.Id);
+            if (_order != null)
+            {
+                _order = colorder01Entity;
+
+                return await _content.SaveChangesAsync() > 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<ColOrder01Entity> ColOrder01(int id)
+        {
+            return await _content.ColOrder01.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<ColOrder01Entity>> ColOrder01List(int id)
+        {
+            var list = await _content.ColOrder01.Where(x => x.Id == id).ToListAsync();
+
+            list = list.OrderByDescending(x => x.SNo).ToList();
+
+            return list;
+
+        }
+
+        public async Task<bool> AddColOrder02(ColOrder02Entity colorder02Entity)
+        {
+            await _content.ColOrder02.AddAsync(colorder02Entity);
+            return await _content.SaveChangesAsync() > 0;
+        }
+
+
+        public async Task<bool> UpdateColOrder02(ColOrder02Entity colorder02Entity)
+        {
+            var _order = await _content.ColOrder02.FindAsync(colorder02Entity.Id);
+            if (_order != null)
+            {
+                _order = colorder02Entity;
+
+                return await _content.SaveChangesAsync() > 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<ColOrder02Entity> ColOrder02(int id)
+        {
+            return await _content.ColOrder02.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<ColOrder02Entity>> ColOrder02List(int id)
+        {
+            var list = await _content.ColOrder02.Where(x => x.Id == id).ToListAsync();
+
+            list = list.OrderByDescending(x => x.SNo).ToList();
+
+            return list;
+
+        }
+
     }
 }

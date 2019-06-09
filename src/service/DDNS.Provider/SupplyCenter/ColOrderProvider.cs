@@ -38,5 +38,44 @@ namespace DDNS.Provider.SupplyCenter
         {
             return _data.ColOrderList(begTime, endTime);
         }
+
+        public Task<bool> AddColOrder01(ColOrder01Entity colorder01Entity)
+        {
+            return _data.AddColOrder01(colorder01Entity);
+        }
+
+        public Task<bool> UpdateColOrder01(ColOrder01Entity colorder01Entity)
+        {
+            return _data.UpdateColOrder01(colorder01Entity);
+        }
+        public Task<ColOrder01Entity> ColOrder01(int id)
+        {
+            return _data.ColOrder01(id);
+        }
+        public Task<IEnumerable<ColOrder01Entity>> ColOrder01List(int id)
+        {
+            return _data.ColOrder01List(id);
+        }
+
+        public Task<bool> AddColOrder02(ColOrder02Entity colorder02Entity)
+        {
+            return _data.AddColOrder02(colorder02Entity);
+        }
+
+        public Task<bool> UpdateColOrder02(ColOrder02Entity colorder02Entity)
+        {
+            return _data.UpdateColOrder02(colorder02Entity);
+        }
+        public Task<ColOrder02Entity> ColOrder02(int id)
+        {
+            return _data.ColOrder02(id);
+        }
+        public Task<IEnumerable<ColOrder02Entity>> ColOrder02List(int id)
+        {
+            return _data.ColOrder02List(id);
+        }
+
+
+
     }
 }

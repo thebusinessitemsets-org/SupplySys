@@ -39,7 +39,27 @@ namespace DDNS.Provider.SupplyCenter
             return _data.OrderList(begTime, endTime);
         }
 
-       
+        public Task<bool> AddOrder01(Order01Entity orderEntity)
+        {
+            return _data.AddOrder01(orderEntity);
+        }
+        public Task<bool> DelOrder01(int id)
+        {
+            return _data.DelOrder01(id);
+        }
+        public Task<bool> UpdateOrder01(Order01Entity orderEntity)
+        {
+            return _data.UpdateOrder01(orderEntity);
 
+        }
+        public Task<Order01Entity> Order01(int id)
+        {
+            return _data.Order01(id);
+        }
+        public Task<IEnumerable<Order01Entity>> Order01List(int id)
+        {
+            return _data.Order01List(id);
+        }
+         
     }
 }

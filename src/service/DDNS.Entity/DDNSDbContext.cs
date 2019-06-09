@@ -1,6 +1,7 @@
 ﻿using DDNS.Entity.Events;
 using DDNS.Entity.LoginLog;
 using DDNS.Entity.SupplyCenter;
+using DDNS.Entity.SysMangerment;
 using DDNS.Entity.Tunnel;
 using DDNS.Entity.Users;
 using DDNS.Entity.Verify;
@@ -31,6 +32,10 @@ namespace DDNS.Entity
         public DbSet<ColOrder01Entity> ColOrder01 { get; set; }
         public DbSet<ColOrder02Entity> ColOrder02 { get; set; }
 
+        public DbSet<MenuInfoEntity> MenuInfo { get; set; }
+        public DbSet<MenuControlInfoEntity> MenuControlInfo { get; set; }
+        public DbSet<DIVISIONEntity> DIVISION { get; set; }
+        public DbSet<BranchEntity> Branch { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
