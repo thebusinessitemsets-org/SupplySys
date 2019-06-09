@@ -2,6 +2,7 @@
 using DDNS.Entity.LoginLog;
 using DDNS.Entity.SupplyCenter;
 using DDNS.Entity.DataCenter;
+using DDNS.Entity.SysMangerment;
 using DDNS.Entity.Tunnel;
 using DDNS.Entity.Users;
 using DDNS.Entity.Verify;
@@ -36,7 +37,12 @@ namespace DDNS.Entity
         public DbSet<Order01Entity> Order01 { get; set; }
         public DbSet<ColOrderEntity> ColOrder { get; set; }
         public DbSet<ColOrder01Entity> ColOrder01 { get; set; }
+        public DbSet<ColOrder02Entity> ColOrder02 { get; set; }
 
+        public DbSet<MenuInfoEntity> MenuInfo { get; set; }
+        public DbSet<MenuControlInfoEntity> MenuControlInfo { get; set; }
+        public DbSet<DIVISIONEntity> DIVISION { get; set; }
+        public DbSet<BranchEntity> Branch { get; set; }
 
 
 

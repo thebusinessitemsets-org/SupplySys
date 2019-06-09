@@ -116,7 +116,7 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<UsersEntity> GetUserInfo(string userName, string password)
         {
-            return await _content.Users.FirstOrDefaultAsync(u => (u.LoginName == userName || u.EMP_EMAIL == userName) && u.LoginPassword == MD5Util.TextToMD5(password));
+            return await _content.Users.FirstOrDefaultAsync(u => (u.LoginName == userName || u.EMP_EMAIL == userName) && u.LoginPassword == MD5Util.TextToMD5(password) && u.STATUS == 1);
         }
 
         /// <summary>
