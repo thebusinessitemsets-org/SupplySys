@@ -2,12 +2,14 @@
 using DDNS.DataModel.Tunnel;
 using DDNS.DataModel.Users;
 using DDNS.DataModel.Verify;
+using DDNS.DataModel.DataCenter;
 using DDNS.Entity;
 using DDNS.Entity.AppSettings;
 using DDNS.Provider.LoginLog;
 using DDNS.Provider.Tunnel;
 using DDNS.Provider.Users;
 using DDNS.Provider.Verify;
+using DDNS.Provider.DataCenter;
 using DDNS.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -60,6 +62,9 @@ namespace DDNS.Web
             services.AddScoped<LoginLogDataModel>();
             services.AddScoped<TunnelProvider>();
             services.AddScoped<TunnelDataModel>();
+            //DataCenter
+            services.AddScoped<ProdDepDataModel>();
+            services.AddScoped<ProdDepProvider>();
 
             services.AddDbContext<DDNSDbContext>(options =>
             {

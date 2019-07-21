@@ -9,26 +9,24 @@ using System.Linq;
 
 namespace DDNS.DataModel.DataCenter
 {
-    public class ProdDepDataModel
+    public class COMPONENT00DataModel
     {
         private readonly DDNSDbContext _content;
 
-        public ProdDepDataModel(DDNSDbContext context)
+        public COMPONENT00DataModel(DDNSDbContext context)
         {
             _content = context;
         }
 
-        public async Task<bool> AddProdDep(ProdDepEntity prodDepEntity)
+        public async Task<bool> AddCOMPONENT00s(List<COMPONENT00Entity> cOMPONENT00Entities)
         {
-            //DDNSDbContext cc = new DDNSDbContext();
-            await _content.ProdDep.AddAsync(prodDepEntity);
-            //return _content.SaveChanges() > 0;
+            await _content.COMPONENT00.AddRangeAsync(cOMPONENT00Entities);
             return await _content.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> DelProdDep(int Id)
+        public async Task<bool> DelCOMPONENT00(int Id)
         {
-            var _data = _content.ProdDep.FindAsync(Id);
+            var _data = _content.COMPONENT00.FindAsync(Id);
             if (_data != null)
             {
                 return await _content.SaveChangesAsync() > 0;
@@ -39,9 +37,9 @@ namespace DDNS.DataModel.DataCenter
             }
         }
 
-        public async Task<bool> UpdateProdDep(ProdDepEntity prodDepEntity)
+        public async Task<bool> UpdateCOMPONENT00(COMPONENT00Entity cOMPONENT00Entity)
         {
-            var _data = _content.ProdDep.FindAsync(prodDepEntity.Id);
+            var _data = _content.COMPONENT00.FindAsync(cOMPONENT00Entity.Id);
             if (_data != null)
             {
                 return await _content.SaveChangesAsync() > 0;
@@ -52,15 +50,14 @@ namespace DDNS.DataModel.DataCenter
             }
         }
 
-        public async Task<ProdDepEntity> ProdDep(int id)
+        public async Task<COMPONENT00Entity> COMPONENT00(int id)
         {
-            ProdDepEntity entity = await _content.ProdDep.FindAsync(id);
-            return entity;
+            return await _content.COMPONENT00.FindAsync(id);
         }
 
-        public async Task<IEnumerable<ProdDepEntity>> ProdDepList()
+        public async Task<IEnumerable<COMPONENT00Entity>> COMPONENT00List()
         {
-            var list = await _content.ProdDep.Where(x => x.Id == x.Id).ToListAsync();
+            var list = await _content.COMPONENT00.Where(x => x.Id == x.Id).ToListAsync();
             list = list.OrderByDescending(x => x.Id).ToList();
             return list;
         }
