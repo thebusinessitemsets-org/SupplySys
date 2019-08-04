@@ -181,6 +181,7 @@ namespace DDNS.Web.API.Account
                     {
                         data.Code = 0;
                         data.Msg = _localizer["login.success"];
+                        data.Data = user;
 
                         var claimIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                         claimIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
