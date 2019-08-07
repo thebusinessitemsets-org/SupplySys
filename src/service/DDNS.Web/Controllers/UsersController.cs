@@ -10,9 +10,9 @@ namespace DDNS.Web.Controllers
     [PermissionFilter]
     public class UsersController : Controller
     {
-        private readonly UsersProvider _usersProvider;
+        private readonly ManagerProvider _usersProvider;
 
-        public UsersController(UsersProvider usersProvider)
+        public UsersController(ManagerProvider usersProvider)
         {
             _usersProvider = usersProvider;
         }

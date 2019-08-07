@@ -1,6 +1,6 @@
 ﻿namespace DDNS.Entity.Users
 {
-    public enum UserTypeEnum
+    public enum ManagerTypeEnum
     {
         /// <summary>
         /// 用户

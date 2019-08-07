@@ -12,10 +12,10 @@ namespace DDNS.Web.Controllers
     [Authorize]
     public class ConsoleController : Controller
     {
-        private readonly UsersProvider _usersProvider;
+        private readonly ManagerProvider _usersProvider;
         private readonly LoginLogProvider _loginLogProvider;
 
-        public ConsoleController(UsersProvider usersProvider, LoginLogProvider loginLogProvider)
+        public ConsoleController(ManagerProvider usersProvider, LoginLogProvider loginLogProvider)
         {
             _usersProvider = usersProvider;
             _loginLogProvider = loginLogProvider;

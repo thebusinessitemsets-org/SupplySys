@@ -2,7 +2,7 @@
 
 namespace DDNS.Entity.Users
 {
-    public class UsersEntity
+    public class ManagerEntity
     {
         public int ID { get; set; }
         public string LoginName { get; set; }

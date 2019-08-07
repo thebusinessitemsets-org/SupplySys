@@ -1,89 +1,59 @@
-﻿using DDNS.DataModel.Users;
-using DDNS.Entity.Users;
-using DDNS.Interface.Users;
+﻿using DDNS.Entity.Users;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DDNS.Provider.Users
+namespace DDNS.Interface.Users
 {
-    public class UsersProvider : IUsers
+    public interface IManager
     {
-        private readonly UsersDataModel _data;
-
-        public UsersProvider(UsersDataModel data)
-        {
-            _data = data;
-        }
-
         /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Task<bool> AddUser(UsersEntity user)
-        {
-            return _data.AddUser(user);
-        }
+        Task<bool> AddUser(ManagerEntity user);
 
         /// <summary>
         /// 删除用户
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<bool> DeleteUser(int id)
-        {
-            return _data.DeleteUser(id);
-        }
+        Task<bool> DeleteUser(int id);
 
         /// <summary>
         /// 禁用用户
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<bool> DisableUser(int id)
-        {
-            return _data.DisableUser(id);
-        }
+        Task<bool> DisableUser(int id);
 
         /// <summary>
         /// 解除禁用
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<bool> RemoveDisable(int id)
-        {
-            return _data.RemoveDisable(id);
-        }
+        Task<bool> RemoveDisable(int id);
 
         /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public Task<bool> UpdateUser(UsersEntity user)
-        {
-            return _data.UpdateUser(user);
-        }
+        Task<bool> UpdateUser(ManagerEntity user);
 
         /// <summary>
         /// 获取用户信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<UsersEntity> GetUserInfo(int id)
-        {
-            return _data.GetUserInfo(id);
-        }
+        Task<ManagerEntity> GetUserInfo(int id);
 
         /// <summary>
         /// 获取用户信息
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public Task<UsersEntity> GetUserInfo(string userName)
-        {
-            return _data.GetUserInfo(userName);
-        }
+        Task<ManagerEntity> GetUserInfo(string userName);
 
         /// <summary>
         /// 获取用户信息
@@ -91,10 +61,7 @@ namespace DDNS.Provider.Users
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public Task<UsersEntity> GetUserInfo(string userName, string password)
-        {
-            return _data.GetUserInfo(userName, password);
-        }
+        Task<ManagerEntity> GetUserInfo(string userName, string password);
 
         /// <summary>
         /// 用户列表
@@ -104,9 +71,6 @@ namespace DDNS.Provider.Users
         /// <param name="status"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public Task<IEnumerable<UsersEntity>> UserList(string userName = null, string email = null, int status = 0, string token = null)
-        {
-            return _data.UserList(userName, email, status, token);
-        }
+        Task<IEnumerable<ManagerEntity>> UserList(string userName = null, string email = null, int status = 0, string token = null);
     }
 }

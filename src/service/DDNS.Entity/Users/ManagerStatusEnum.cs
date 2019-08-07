@@ -1,6 +1,6 @@
 ﻿namespace DDNS.Entity.Users
 {
-    public enum UserStatusEnum
+    public enum ManagerStatusEnum
     {
         /// <summary>
         /// 正常/激活

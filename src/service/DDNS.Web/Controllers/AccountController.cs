@@ -13,10 +13,10 @@ namespace DDNS.Web.Controllers
     public class AccountController : Controller
     {
         private readonly VerifyProvider _verifyProvider;
-        private readonly UsersProvider _usersProvider;
+        private readonly ManagerProvider _usersProvider;
         private readonly IStringLocalizer<AccountController> _localizer;
 
-        public AccountController(VerifyProvider verifyProvider, UsersProvider usersProvider, IStringLocalizer<AccountController> localizer)
+        public AccountController(VerifyProvider verifyProvider, ManagerProvider usersProvider, IStringLocalizer<AccountController> localizer)
         {
             _verifyProvider = verifyProvider;
             _usersProvider = usersProvider;
@@ -87,7 +87,7 @@ namespace DDNS.Web.Controllers
             if (verify != null)
             {
                 var user = await _usersProvider.GetUserInfo(verify.UserId);
-                user.IsEnable = (int)UserStatusEnum.Normal;
+                user.IsEnable = (int)ManagerStatusEnum.Normal;
                 await _usersProvider.UpdateUser(user);
 
                 await _verifyProvider.VerifySuccess(token);

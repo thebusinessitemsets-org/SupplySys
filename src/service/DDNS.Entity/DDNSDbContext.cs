@@ -15,7 +15,7 @@ namespace DDNS.Entity
     {
         public DDNSDbContext(DbContextOptions<DDNSDbContext> options) : base(options) { }
 
-        public DbSet<UsersEntity> Users { get; set; }
+        public DbSet<ManagerEntity> Manager { get; set; }
 
         public DbSet<VerifyEntity> Verifies { get; set; }
 
@@ -66,6 +66,8 @@ namespace DDNS.Entity
         public DbSet<MenuControlInfoEntity> MenuControlInfo { get; set; }
         public DbSet<DIVISIONEntity> DIVISION { get; set; }
         public DbSet<BranchEntity> Branch { get; set; }
+
+        //manager
 
 
 

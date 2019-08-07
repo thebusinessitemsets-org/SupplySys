@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DDNS.DataModel.Users
 {
-    public class UsersDataModel
+    public class ManagerDataModel
     {
         private readonly DDNSDbContext _content;
-        public UsersDataModel(DDNSDbContext context)
+        public ManagerDataModel(DDNSDbContext context)
         {
             _content = context;
         }
@@ -21,9 +21,9 @@ namespace DDNS.DataModel.Users
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<bool> AddUser(UsersEntity user)
+        public async Task<bool> AddUser(ManagerEntity user)
         {
-            await _content.Users.AddAsync(user);
+            await _content.Manager.AddAsync(user);
             return await _content.SaveChangesAsync() > 0;
         }
 
@@ -34,10 +34,10 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<bool> DeleteUser(int id)
         {
-            var _user = await _content.Users.FindAsync(id);
+            var _user = await _content.Manager.FindAsync(id);
             if (_user != null)
             {
-                _user.IsEnable = (int)UserDeleteEnum.Deleted;
+                _user.IsEnable = (int)ManagerDeleteEnum.Deleted;
                 return await _content.SaveChangesAsync() > 0;
             }
             else
@@ -51,10 +51,10 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<bool> DisableUser(int id)
         {
-            var _user = await _content.Users.FindAsync(id);
+            var _user = await _content.Manager.FindAsync(id);
             if (_user != null)
             {
-                _user.IsEnable = (int)UserStatusEnum.Disable;
+                _user.IsEnable = (int)ManagerStatusEnum.Disable;
                 return await _content.SaveChangesAsync() > 0;
             }
             else
@@ -68,10 +68,10 @@ namespace DDNS.DataModel.Users
         /// <returns></returns>
         public async Task<bool> RemoveDisable(int id)
         {
-            var _user = await _content.Users.FindAsync(id);
+            var _user = await _content.Manager.FindAsync(id);
             if (_user != null)
             {
-                _user.IsEnable = (int)UserStatusEnum.Normal;
+                _user.IsEnable = (int)ManagerStatusEnum.Normal;
                 return await _content.SaveChangesAsync() > 0;
             }
             else
@@ -83,9 +83,9 @@ namespace DDNS.DataModel.Users
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateUser(UsersEntity user)
+        public async Task<bool> UpdateUser(ManagerEntity user)
         {
-            var _user = await _content.Users.FindAsync(user.ID);
+            var _user = await _content.Manager.FindAsync(user.ID);
             if (_user != null)
             {
                 _user = user;
@@ -103,9 +103,9 @@ namespace DDNS.DataModel.Users
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UsersEntity> GetUserInfo(int id)
+        public async Task<ManagerEntity> GetUserInfo(int id)
         {
-            return await _content.Users.FindAsync(id);
+            return await _content.Manager.FindAsync(id);
         }
 
         /// <summary>
@@ -114,9 +114,12 @@ namespace DDNS.DataModel.Users
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<UsersEntity> GetUserInfo(string userName, string password)
+        public async Task<ManagerEntity> GetUserInfo(string userName, string password)
         {
-            return await _content.Users.FirstOrDefaultAsync(u => (u.LoginName == userName || u.EMP_EMAIL == userName) && u.LoginPassword == MD5Util.TextToMD5(password) && u.STATUS == 1);
+            var user = await _content.Manager.FirstOrDefaultAsync(u => (u.LoginName == userName || u.EMP_EMAIL == userName) && u.LoginPassword == MD5Util.TextToMD5(password) && u.STATUS == 1);
+
+
+            return await _content.Manager.FirstOrDefaultAsync(u => (u.LoginName == userName || u.EMP_EMAIL == userName) && u.LoginPassword == MD5Util.TextToMD5(password) && u.STATUS == 1);
         }
 
         /// <summary>
@@ -124,17 +127,17 @@ namespace DDNS.DataModel.Users
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<UsersEntity> GetUserInfo(string userName)
+        public async Task<ManagerEntity> GetUserInfo(string userName)
         {
             try {
-                return await _content.Users.FirstOrDefaultAsync(u => u.LoginName == userName || u.EMP_EMAIL == userName);
+                return await _content.Manager.FirstOrDefaultAsync(u => u.LoginName == userName || u.EMP_EMAIL == userName);
             }
             catch (System.Exception ex)
             {
                 string err = ex.Message;
             }
 
-            return await _content.Users.FirstOrDefaultAsync(u => u.LoginName == userName || u.EMP_EMAIL == userName);
+            return await _content.Manager.FirstOrDefaultAsync(u => u.LoginName == userName || u.EMP_EMAIL == userName);
 
         }
 
@@ -146,9 +149,9 @@ namespace DDNS.DataModel.Users
         /// <param name="status"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<UsersEntity>> UserList(string userName = null, string email = null, int status = 0, string token = null)
+        public async Task<IEnumerable<ManagerEntity>> UserList(string userName = null, string email = null, int status = 0, string token = null)
         {
-            var list = await _content.Users.Where(x => x.IsEnable == (int)UserDeleteEnum.Normal).ToListAsync();
+            var list = await _content.Manager.Where(x => x.IsEnable == (int)ManagerDeleteEnum.Normal).ToListAsync();
 
             if (!string.IsNullOrEmpty(userName))
             {

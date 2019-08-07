@@ -54,8 +54,8 @@ namespace DDNS.Web
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<EmailUtil>();
             services.AddSingleton<TunnelConfig>();
-            services.AddScoped<UsersProvider>();
-            services.AddScoped<UsersDataModel>();
+            services.AddScoped<ManagerProvider>();
+            services.AddScoped<ManagerDataModel>();
             services.AddScoped<VerifyProvider>();
             services.AddScoped<VerifyDataModel>();
             services.AddScoped<LoginLogProvider>();

@@ -23,12 +23,12 @@ namespace DDNS.Web.API.Users
     [PermissionFilter]
     public class UsersApiController : ControllerBase
     {
-        private readonly UsersProvider _usersProvider;
+        private readonly ManagerProvider _usersProvider;
         private readonly LoginLogProvider _loginLogProvider;
         private readonly IStringLocalizer<UsersApiController> _localizer;
         private readonly TunnelConfig _tunnelConfig;
 
-        public UsersApiController(UsersProvider usersProvider, LoginLogProvider loginLogProvider, IStringLocalizer<UsersApiController> localizer, IOptions<TunnelConfig> config)
+        public UsersApiController(ManagerProvider usersProvider, LoginLogProvider loginLogProvider, IStringLocalizer<UsersApiController> localizer, IOptions<TunnelConfig> config)
         {
             _usersProvider = usersProvider;
             _loginLogProvider = loginLogProvider;
@@ -63,7 +63,7 @@ namespace DDNS.Web.API.Users
                     ,LoginName= x.LoginName
                     ,LoginPassword= x.LoginPassword
                     ,LoginTime= x.LoginTime
-                    ,BranchID= x.BranchID
+                    //,BranchID= x.BranchID
                     ,BranchType= x.BranchType
                     ,SHOP_ID= x.SHOP_ID
                     ,DIVISION_ID= x.DIVISION_ID
@@ -129,14 +129,14 @@ namespace DDNS.Web.API.Users
                 return data;
             }
 
-            var user = new UsersEntity
+            var user = new ManagerEntity
             { 
                 LoginName = vm.LoginName
                 ,LoginPassword = vm.LoginPassword
                     ,
                 LoginTime = vm.LoginTime
-                    ,
-                BranchID = vm.BranchID
+                    //,
+                //BranchID = vm.BranchID
                     ,
                 BranchType = vm.BranchType
                     ,

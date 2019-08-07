@@ -86,7 +86,7 @@ namespace DDNS.DataModel.Tunnel
         /// <returns></returns>
         public async Task<IEnumerable<UserTunnelsEntity>> Tunnels(string userName = null, string email = null, int status = 0, string subDomain = null)
         {
-            var list = await _content.Tunnels.Join(_content.Users, t => t.UserId, u => u.ID, (t, u) => new UserTunnelsEntity
+            var list = await _content.Tunnels.Join(_content.Manager, t => t.UserId, u => u.ID, (t, u) => new UserTunnelsEntity
             {
                 TunnelId = t.TunnelId,
                 TunnelProtocol = t.TunnelProtocol,

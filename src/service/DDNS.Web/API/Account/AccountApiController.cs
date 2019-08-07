@@ -25,7 +25,7 @@ namespace DDNS.Web.API.Account
     [ApiController]
     public class AccountApiController : ControllerBase
     {
-        private readonly UsersProvider _userProvider;
+        private readonly ManagerProvider _userProvider;
         private readonly VerifyProvider _verifyProvider;
         private readonly LoginLogProvider _loginProvider;
         private readonly IHttpContextAccessor _accessor;
@@ -33,7 +33,7 @@ namespace DDNS.Web.API.Account
         private readonly EmailUtil _email;
         private readonly EmailConfig _config;
 
-        public AccountApiController(UsersProvider usersProvider, VerifyProvider verifyProvider, LoginLogProvider loginLogProvider, IHttpContextAccessor accessor, IStringLocalizer<AccountApiController> localizer, EmailUtil email, IOptions<EmailConfig> config)
+        public AccountApiController(ManagerProvider usersProvider, VerifyProvider verifyProvider, LoginLogProvider loginLogProvider, IHttpContextAccessor accessor, IStringLocalizer<AccountApiController> localizer, EmailUtil email, IOptions<EmailConfig> config)
         {
             _userProvider = usersProvider;
             _verifyProvider = verifyProvider;
@@ -80,7 +80,7 @@ namespace DDNS.Web.API.Account
                 return data;
             }
 
-            var user = new UsersEntity
+            var user = new ManagerEntity
             {
                 LoginName = vm.LoginName,
                 LoginPassword = vm.LoginPassword,
@@ -89,7 +89,7 @@ namespace DDNS.Web.API.Account
                 //BranchType
                 //SHOP_ID
                 //DIVISION_ID
-                IsEnable = (int)UserTypeEnum.IsUser,
+                IsEnable = (int)ManagerTypeEnum.IsUser,
                 //EMP_ID
                 //EMP_NAME
                 //EMP_Birthday
@@ -112,7 +112,7 @@ namespace DDNS.Web.API.Account
                 //MOD_DATETIME
                 //MOD_USER_ID
                 //LAST_UPDATE
-                STATUS = (int)UserStatusEnum.Normal
+                STATUS = (int)ManagerStatusEnum.Normal
                  
             };
 
@@ -172,7 +172,7 @@ namespace DDNS.Web.API.Account
                 var user = await _userProvider.GetUserInfo(vm.LoginName, vm.LoginPassword);
                 if (user != null)
                 {
-                    if (user.IsEnable == (int)UserStatusEnum.Disable)
+                    if (user.IsEnable == (int)ManagerStatusEnum.Disable)
                     {
                         data.Code = 1;
                         data.Msg = _localizer["login.forbidden"];

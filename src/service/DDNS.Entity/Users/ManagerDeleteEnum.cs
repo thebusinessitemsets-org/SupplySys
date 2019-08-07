@@ -1,6 +1,6 @@
 ﻿namespace DDNS.Entity.Users
 {
-    public enum UserDeleteEnum
+    public enum ManagerDeleteEnum
     {
         /// <summary>
         /// 正常
